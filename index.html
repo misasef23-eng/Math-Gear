@@ -5292,7 +5292,7 @@
         <div style="background:var(--surface); border:2px solid var(--line); padding:24px; border-radius:28px; max-width:360px;">
           <div style="font-size:16px; font-weight:800; margin-bottom:8px;">Máy tính đang tách ra cửa sổ nổi</div>
           <p style="font-size:13px; color:var(--ink-2); margin-bottom:16px;">
-            Cửa sổ nổi tự động co giãn vừa khít toàn bộ thân máy trên mọi kích thước màn hình (kể cả MacBook 11–13 inch). Mọi thao tác vẫn đồng bộ trực tiếp với trang chính.
+            Cửa sổ nổi tự động co giãn vừa khít toàn bộ thân máy trên mọi kích thước màn hình. Mọi thao tác vẫn đồng bộ trực tiếp với trang chính.
           </p>
           <button type="button" class="tool-btn primary-btn" id="btnRecallPiP">Đưa máy tính về lại trang chính</button>
         </div>
@@ -5395,13 +5395,20 @@
       const targetH = Math.min(790, Math.max(460, Math.floor(availH * 0.88)));
       const targetW = Math.min(448, Math.max(280, Math.min(Math.floor(availW * 0.45), Math.round(targetH * 0.58))));
 
+      const screenLeft = (window.screen && typeof window.screen.availLeft === "number") ? window.screen.availLeft : 0;
+      const screenTop = (window.screen && typeof window.screen.availTop === "number") ? window.screen.availTop : 0;
+      const popLeft = screenLeft + 18;
+      const popTop = screenTop + 60;
+
       // Ưu tiên 1: Document Picture-in-Picture API (Cửa sổ nổi luôn nằm trên cùng mọi ứng dụng - Chrome/Edge)
       if ("documentPictureInPicture" in window) {
         try {
           const pipWin = await window.documentPictureInPicture.requestWindow({
             width: targetW,
-            height: targetH
+            height: targetH,
+            preferInitialWindowPlacement: false
           });
+          try { pipWin.moveTo(popLeft, popTop); } catch (e) {}
           mountCalcColumnIntoFloatingWindow(pipWin);
           showToast("Đã tách máy tính ra cửa sổ nổi tự vừa màn hình.");
           return;
@@ -5410,12 +5417,12 @@
         }
       }
 
-      // Ưu tiên 2: Cửa sổ Popout độc lập (window.open) có tự co giãn vừa màn hình
+      // Ưu tiên 2: Cửa sổ Popout độc lập (window.open) đặt sẵn bên trái màn hình
       try {
         const popWin = window.open(
           "",
           "MathGearFloatingCalc",
-          `width=${targetW},height=${targetH},menubar=no,toolbar=no,location=no,status=no,resizable=yes`
+          `width=${targetW},height=${targetH},left=${popLeft},top=${popTop},menubar=no,toolbar=no,location=no,status=no,resizable=yes`
         );
         if (popWin && popWin.document) {
           mountCalcColumnIntoFloatingWindow(popWin);

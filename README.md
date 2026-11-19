@@ -1,17 +1,17 @@
 # MathGear — Simulate · Explore · Learn
 
-**MathGear** là ứng dụng web mã nguồn mở (PWA) giả lập 1:1 hai dòng máy tính khoa học phổ biến nhất tại Việt Nam (**fx-580 LNA** và **fx-880BTG**), chạy **100% Offline** không phụ thuộc máy chủ hay kết nối mạng. Dự án được thiết kế dành riêng cho học sinh ôn thi THPT, sinh viên và giáo viên giảng dạy trực tuyến.
+**MathGear** là ứng dụng web mã nguồn mở (PWA) giả lập 1:1 hai dòng máy tính khoa học phổ biến nhất tại Việt Nam (**fx-580 LNA** và **fx-880BTG**), chạy **100% Offline** không phụ thuộc máy chủ hay kết nối mạng. Dự án được thiết kế dành riêng cho học sinh, sinh viên ôn thi THPT và giáo viên giảng dạy trực tuyến.
 
 ## Trải nghiệm trực tuyến & Ảnh Demo
 
-Truy cập trực tiếp bản chạy web tại: **[https://misasef23-eng.github.io/Math-Gear/](https://misasef23-eng.github.io/Math-Gear/)**
+Truy cập trực tiếp bản chạy web tại: [**https://misasef23-eng.github.io/Math-Gear/**](https://www.google.com/search?q=https://misasef23-eng.github.io/Math-Gear/)
 
 <p align="center">
-  <img src="assets/demo-desktop.jpg" alt="Giao diện toàn màn hình MathGear trên máy tính" width="100%" />
+<img src="assets/demo-desktop.jpg" alt="Giao diện toàn màn hình MathGear trên máy tính" width="100%" />
 </p>
 
 <p align="center">
-  <img src="assets/demo-calculator.jpg" alt="Cận cảnh giao diện máy tính MathGear fx-580 LNA với 4 phiên bản màu" width="380" />
+<img src="assets/demo-calculator.jpg" alt="Cận cảnh giao diện máy tính MathGear fx-580 LNA với 4 phiên bản màu" width="380" />
 </p>
 
 ## Tính năng nổi bật
@@ -49,6 +49,7 @@ Math-Gear/
 │   └── donate-qr.jpg   # Mã VietQR ủng hộ duy trì dự án & hỗ trợ học sinh khó khăn
 └── README.md           # Tài liệu giới thiệu & hướng dẫn
 
+
 ```
 
 ## Hướng dẫn sử dụng & triển khai
@@ -59,6 +60,7 @@ Mở file `index.html` bằng trình duyệt hiện đại (Chrome, Edge, Safari
 
 ```
 python3 -m http.server 8080
+
 
 ```
 
