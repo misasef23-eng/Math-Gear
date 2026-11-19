@@ -1,10 +1,12 @@
 // Service Worker - Casio Study Desk PWA (100% Offline Ready)
-const CACHE_NAME = 'casio-study-desk-v1.2';
+const CACHE_NAME = 'mathgear-pwa-v1.3';
 const OFFLINE_ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './sw.js'
+  './sw.js',
+  './favicon.ico',
+  './assets/favicon.png'
 ];
 
 self.addEventListener('install', (event) => {
