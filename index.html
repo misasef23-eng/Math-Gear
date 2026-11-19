@@ -2088,6 +2088,316 @@
       }
     }
 
+
+
+    /* Lucian #004 Fill-Progress Download Buttons for PNG & PDF (40px Toolbar Edition) */
+    .dl-prog-wrap {
+      --dl-bar: linear-gradient(90deg, #003049, #669BBC 58%, #119C72);
+      --dl-mint: #119C72;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      flex: none;
+    }
+    .dl-prog-btn {
+      --p: 0;
+      position: relative;
+      width: 128px;
+      height: 40px;
+      border: 0;
+      padding: 0;
+      border-radius: 999px;
+      background: var(--ink);
+      color: var(--page);
+      overflow: hidden;
+      isolation: isolate;
+      cursor: pointer;
+      transition: width 0.52s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.4s cubic-bezier(0.34, 1.45, 0.64, 1), background-color 0.4s ease;
+    }
+    .dl-prog-btn:hover { transform: translateY(-1px); }
+    .dl-prog-btn:active { transform: scale(0.96); }
+    .dl-prog-idle,
+    .dl-prog-run,
+    .dl-prog-ok {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      transition: opacity 0.3s ease, transform 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .dl-prog-idle {
+      gap: 8px;
+      padding: 0 14px 0 6px;
+    }
+    .dl-prog-arw {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(253, 240, 213, 0.16);
+      overflow: hidden;
+      flex: none;
+    }
+    body.dark-desk .dl-prog-arw {
+      background: rgba(0, 48, 73, 0.14);
+    }
+    .dl-prog-arw svg {
+      width: 15px;
+      height: 15px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .dl-prog-arw .dl-a {
+      transition: transform 0.4s ease;
+    }
+    .dl-prog-btn:hover .dl-prog-arw .dl-a {
+      animation: dl-bob 0.9s ease infinite;
+    }
+    @keyframes dl-bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(2.2px); }
+    }
+    .dl-prog-idle b {
+      font-size: 12.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .dl-prog-track {
+      position: absolute;
+      inset: 0;
+      background: #002336;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .dl-prog-bar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      background: var(--dl-bar);
+      transform-origin: 0 50%;
+      transform: scaleX(var(--p));
+      border-radius: inherit;
+    }
+    .dl-prog-bar::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+      background-size: 220% 100%;
+      animation: dl-shine 1.1s linear infinite;
+    }
+    @keyframes dl-shine {
+      from { background-position: 120% 0; }
+      to { background-position: -100% 0; }
+    }
+    .dl-prog-run {
+      justify-content: space-between;
+      padding: 0 14px;
+      opacity: 0;
+      transform: translateY(10px);
+      color: #ffffff;
+    }
+    .dl-prog-run b {
+      font-size: 13px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    .dl-prog-run small {
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.85;
+    }
+    .dl-prog-ok {
+      justify-content: center;
+      gap: 6px;
+      opacity: 0;
+      transform: scale(0.65);
+      color: #ffffff;
+    }
+    .dl-prog-ok i {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.22);
+      flex: none;
+    }
+    .dl-prog-ok svg {
+      width: 13px;
+      height: 13px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .dl-prog-ok path {
+      stroke-dasharray: 18;
+      stroke-dashoffset: 18;
+      transition: stroke-dashoffset 0.4s ease 0.18s;
+    }
+    .dl-prog-ok span {
+      font-size: 12.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      max-width: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-width 0.45s ease, opacity 0.3s ease;
+    }
+    .dl-prog-wrap[data-state="run"] .dl-prog-idle { opacity: 0; transform: translateY(-10px); }
+    .dl-prog-wrap[data-state="run"] .dl-prog-arw .dl-a { transform: translateY(18px); }
+    .dl-prog-wrap[data-state="run"] .dl-prog-track { opacity: 1; }
+    .dl-prog-wrap[data-state="run"] .dl-prog-run { opacity: 1; transform: none; }
+    .dl-prog-wrap[data-state="fold"] .dl-prog-idle,
+    .dl-prog-wrap[data-state="done"] .dl-prog-idle { opacity: 0; }
+    .dl-prog-wrap[data-state="fold"] .dl-prog-btn { width: 40px; background: var(--dl-mint); }
+    .dl-prog-wrap[data-state="fold"] .dl-prog-bar { opacity: 0; }
+    .dl-prog-wrap[data-state="fold"] .dl-prog-ok,
+    .dl-prog-wrap[data-state="done"] .dl-prog-ok { opacity: 1; transform: none; }
+    .dl-prog-wrap[data-state="fold"] .dl-prog-ok path,
+    .dl-prog-wrap[data-state="done"] .dl-prog-ok path { stroke-dashoffset: 0; }
+    .dl-prog-wrap[data-state="done"] .dl-prog-btn {
+      width: 128px;
+      background: var(--dl-mint);
+      transition-timing-function: cubic-bezier(0.34, 1.45, 0.64, 1);
+    }
+    .dl-prog-wrap[data-state="done"] .dl-prog-ok span { max-width: 96px; opacity: 1; }
+
+    /* Lucian #003 Hold-to-Delete Steps Button + Undo Pill (40px Toolbar Edition) */
+    .hold-del-wrap {
+      position: relative;
+      height: 40px;
+      min-width: 158px;
+      flex: none;
+    }
+    .hold-del-btn {
+      --p: 0;
+      position: absolute;
+      inset: 0;
+      border: 0;
+      border-radius: 999px;
+      padding: 0;
+      overflow: hidden;
+      isolation: isolate;
+      cursor: pointer;
+      background: rgba(193, 18, 31, 0.1);
+      color: #C1121F;
+      box-shadow: inset 0 0 0 2px rgba(193, 18, 31, 0.42);
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: transform 0.45s cubic-bezier(0.34, 1.45, 0.64, 1), opacity 0.3s ease;
+    }
+    body.dark-desk .hold-del-btn {
+      background: rgba(244, 114, 128, 0.14);
+      color: #ff949c;
+      box-shadow: inset 0 0 0 2px rgba(255, 148, 156, 0.45);
+    }
+    .hold-del-btn:focus-visible {
+      outline: 2px solid #C1121F;
+      outline-offset: 3px;
+    }
+    .hold-del-lab {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      font-size: 12.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      padding: 0 14px;
+    }
+    .hold-del-lab svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex: none;
+    }
+    .hold-del-fill {
+      background: #C1121F;
+      color: #FDF0D5;
+      clip-path: inset(0 calc(100% - var(--p) * 100%) 0 0 round 999px);
+    }
+    .hold-del-btn.is-holding {
+      transform: scale(0.96);
+      animation: hold-del-shake 0.12s linear infinite;
+      animation-play-state: var(--shake, paused);
+    }
+    @keyframes hold-del-shake {
+      0%, 100% { translate: 0 0; }
+      25% { translate: -0.7px 0.35px; }
+      75% { translate: 0.7px -0.35px; }
+    }
+    .hold-del-btn.is-gone {
+      opacity: 0;
+      transform: scale(0.9);
+      pointer-events: none;
+    }
+    .hold-del-done {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 0 5px 0 14px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: var(--page);
+      opacity: 0;
+      transform: translateY(6px) scale(0.95);
+      pointer-events: none;
+      transition: opacity 0.32s ease, transform 0.45s cubic-bezier(0.34, 1.45, 0.64, 1);
+    }
+    .hold-del-done span {
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .hold-del-undo {
+      height: 30px;
+      padding: 0 12px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(253, 240, 213, 0.22);
+      color: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.2s ease, transform 0.25s ease;
+    }
+    body.dark-desk .hold-del-undo {
+      background: rgba(0, 48, 73, 0.18);
+    }
+    .hold-del-undo:hover {
+      background: rgba(253, 240, 213, 0.35);
+    }
+    .hold-del-undo:active {
+      transform: scale(0.94);
+    }
+    .hold-del-done.is-on {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       * { transition: none !important; animation: none !important; }
     }
@@ -2309,6 +2619,36 @@
                 </svg>
                 <span>Sao chép ảnh</span>
               </button>
+              <div class="dl-prog-wrap" id="dlWrapPNG" data-state="idle">
+                <button type="button" class="dl-prog-btn" id="btnDownloadPNG" aria-label="Tải ảnh PNG các bước">
+                  <span class="dl-prog-track" aria-hidden="true"><span class="dl-prog-bar"></span></span>
+                  <span class="dl-prog-idle" aria-hidden="true">
+                    <span class="dl-prog-arw"><svg viewBox="0 0 24 24"><g class="dl-a"><path d="M12 4.5v11M7 11l5 5 5-5"/></g><path d="M5 19.5h14"/></svg></span>
+                    <b>Tải PNG</b>
+                  </span>
+                  <span class="dl-prog-run" aria-hidden="true"><b class="dl-pct">0%</b><small>PNG</small></span>
+                  <span class="dl-prog-ok" aria-hidden="true"><i><svg viewBox="0 0 16 16"><path d="M3.5 8.4l3 3 6-6.4"/></svg></i><span>Đã tải PNG</span></span>
+                </button>
+              </div>
+              <div class="dl-prog-wrap" id="dlWrapPDF" data-state="idle">
+                <button type="button" class="dl-prog-btn" id="btnDownloadPDF" aria-label="Tải file PDF các bước">
+                  <span class="dl-prog-track" aria-hidden="true"><span class="dl-prog-bar"></span></span>
+                  <span class="dl-prog-idle" aria-hidden="true">
+                    <span class="dl-prog-arw"><svg viewBox="0 0 24 24"><g class="dl-a"><path d="M12 4.5v11M7 11l5 5 5-5"/></g><path d="M5 19.5h14"/></svg></span>
+                    <b>Tải PDF</b>
+                  </span>
+                  <span class="dl-prog-run" aria-hidden="true"><b class="dl-pct">0%</b><small>PDF</small></span>
+                  <span class="dl-prog-ok" aria-hidden="true"><i><svg viewBox="0 0 16 16"><path d="M3.5 8.4l3 3 6-6.4"/></svg></i><span>Đã tải PDF</span></span>
+                </button>
+              </div>
+              <button type="button" class="tool-btn" id="btnTogglePiP" onclick="togglePiPMode()" title="Thu gọn trang, chỉ giữ máy tính và chuỗi phím khi chia sẻ màn hình">
+                <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="3" y="4.5" width="18" height="15" rx="3.2"/>
+                  <rect x="11.2" y="10.2" width="7" height="6.2" rx="1.6" fill="currentColor" stroke="none"/>
+                  <path d="M7 8.5l2.8 2.8M9.8 8.5v2.8H7" stroke-width="1.75"/>
+                </svg>
+                <span class="lbl">Chế độ tối giản</span>
+              </button>
               <button type="button" class="tool-btn" onclick="captureManualStep()" title="Chụp màn hình máy tính hiện tại và ghim thành một bước">
                 <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M4.5 9.5a2.5 2.5 0 0 1 2.5-2.5h1.2l1.1-1.8A1.8 1.8 0 0 1 10.8 4.4h2.4a1.8 1.8 0 0 1 1.5.8L15.8 7H17a2.5 2.5 0 0 1 2.5 2.5v7.5a2.5 2.5 0 0 1-2.5 2.5H7a2.5 2.5 0 0 1-2.5-2.5z"/>
@@ -2318,17 +2658,22 @@
                 <span>Ghim bước</span>
                 <span class="count" id="stepCountBadge">0</span>
               </button>
-              <button type="button" class="tool-btn" onclick="exportSnapshotPNG()">Tải PNG</button>
-              <button type="button" class="tool-btn" onclick="exportSnapshotPDF()">Tải PDF</button>
-              <button type="button" class="tool-btn" id="btnTogglePiP" onclick="togglePiPMode()" title="Thu gọn trang, chỉ giữ máy tính và chuỗi phím khi chia sẻ màn hình">
-                <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
-                  <rect x="3" y="4.5" width="18" height="15" rx="3.2"/>
-                  <rect x="11.2" y="10.2" width="7" height="6.2" rx="1.6" fill="currentColor" stroke="none"/>
-                  <path d="M7 8.5l2.8 2.8M9.8 8.5v2.8H7" stroke-width="1.75"/>
-                </svg>
-                <span class="lbl">Chế độ tối giản</span>
-              </button>
-              <button type="button" class="tool-btn btn-ghost" onclick="clearAllSnapshots()" title="Xóa toàn bộ các bước đã ghi">Xóa hết</button>
+              <div class="hold-del-wrap" id="holdDelStepsWrap">
+                <button type="button" class="hold-del-btn" id="btnHoldClearSteps" aria-label="Nhấn giữ để xóa toàn bộ các bước đã ghim" title="Nhấn giữ 1 giây để xóa toàn bộ các bước đã ghim">
+                  <span class="hold-del-lab">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 7h15M9.5 7V4.8h5V7M7 7l.8 12.2h8.4L17 7"/></svg>
+                    Giữ để xóa hết
+                  </span>
+                  <span class="hold-del-lab hold-del-fill" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M4.5 7h15M9.5 7V4.8h5V7M7 7l.8 12.2h8.4L17 7"/></svg>
+                    Giữ để xóa hết
+                  </span>
+                </button>
+                <div class="hold-del-done" id="holdDelStepsDone" role="status">
+                  <span>Đã xóa</span>
+                  <button type="button" class="hold-del-undo" id="btnUndoClearSteps">Hoàn tác</button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -2351,9 +2696,11 @@
             <div class="guide-block">
               <h3>Cài về máy để dùng khi không có kết nối internet</h3>
               <ul>
-                <li><strong>iPhone, iPad (Safari):</strong> bấm Chia sẻ, rồi chọn Thêm vào MH chính.</li>
-                <li><strong>Android, máy tính (Chrome, Edge):</strong> bấm biểu tượng Cài đặt ứng dụng trên thanh địa chỉ.</li>
-                <li>Sau lần mở đầu tiên, trang được lưu trong máy. Tắt Wi-Fi hoặc 4G vẫn dùng bình thường.</li>
+                <li><strong>Máy tính (Chrome, Cốc Cốc, Edge):</strong> bấm biểu tượng <strong>Cài đặt ứng dụng</strong> (hình màn hình có mũi tên xuống) ở góc phải thanh địa chỉ, hoặc vào menu <code>⋮</code> → <strong>Truyền, lưu và chia sẻ</strong> → <strong>Cài đặt MathGear</strong>.</li>
+                <li><strong>MacBook (Safari):</strong> trên thanh menu phía trên, chọn <strong>Tệp (File)</strong> → <strong>Thêm vào Dock (Add to Dock)</strong> để mở như ứng dụng riêng.</li>
+                <li><strong>iPhone, iPad (Safari):</strong> bấm nút <strong>Chia sẻ</strong>, rồi chọn <strong>Thêm vào MH chính</strong>.</li>
+                <li><strong>Android (Chrome):</strong> bấm menu <code>⋮</code> ở góc trên bên phải → chọn <strong>Cài đặt ứng dụng</strong> (hoặc <strong>Thêm vào màn hình chính</strong>).</li>
+                <li>Sau lần mở đầu tiên hoặc khi đã cài về máy, toàn bộ dữ liệu được lưu sẵn trên thiết bị — tắt Wi-Fi hay 4G vẫn sử dụng đầy đủ tính năng.</li>
               </ul>
             </div>
             <div class="guide-block">
@@ -4706,12 +5053,195 @@
       }
     }
 
+    let deletedSnapshotsBackup = null;
+    let holdDeleteResetTimer = null;
+
     function clearAllSnapshots() {
+      deletedSnapshotsBackup = state.snapshots.map((s) => Object.assign({}, s));
       state.snapshots = [];
       state.pendingStepKeys = [];
       recordStepSnapshot("Bước khởi tạo");
-      showToast("Đã làm mới danh sách bước chụp!");
+      showToast("Đã xóa các bước đã ghim. Bấm Hoàn tác nếu cần khôi phục.");
     }
+
+    function restoreClearedSnapshots() {
+      if (!deletedSnapshotsBackup || !deletedSnapshotsBackup.length) return;
+      state.snapshots = deletedSnapshotsBackup;
+      deletedSnapshotsBackup = null;
+      syncSelectedSnapshotsToCount();
+      renderSnapshotStudio();
+      showToast("Đã hoàn tác toàn bộ các bước đã ghim.");
+    }
+
+    function initHoldToDeleteButton() {
+      const btn = document.getElementById("btnHoldClearSteps");
+      const done = document.getElementById("holdDelStepsDone");
+      const undo = document.getElementById("btnUndoClearSteps");
+      if (!btn || !done || !undo || btn.dataset.bound === '1') return;
+      btn.dataset.bound = '1';
+
+      const rm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const HOLD_MS = 1000;
+      let p = 0, raf = 0, last = 0, holding = false, finished = false;
+
+      const setProgress = (v) => {
+        p = v;
+        btn.style.setProperty("--p", v.toFixed(4));
+      };
+
+      const resetControlUI = () => {
+        if (holdDeleteResetTimer) {
+          clearTimeout(holdDeleteResetTimer);
+          holdDeleteResetTimer = null;
+        }
+        finished = false;
+        holding = false;
+        setProgress(0);
+        btn.classList.remove("is-holding", "is-gone");
+        btn.removeAttribute("tabindex");
+        done.classList.remove("is-on");
+      };
+
+      const completeHold = () => {
+        holding = false;
+        finished = true;
+        raf = 0;
+        last = 0;
+        btn.classList.remove("is-holding");
+        btn.classList.add("is-gone");
+        btn.setAttribute("tabindex", "-1");
+        done.classList.add("is-on");
+        clearAllSnapshots();
+        if (holdDeleteResetTimer) clearTimeout(holdDeleteResetTimer);
+        holdDeleteResetTimer = setTimeout(resetControlUI, 6500);
+      };
+
+      const tick = (now) => {
+        if (!btn.isConnected) return;
+        const dt = now - (last || now);
+        last = now;
+        if (holding) setProgress(Math.min(1, p + dt / HOLD_MS));
+        else setProgress(Math.max(0, p - dt / (HOLD_MS / 2.4)));
+        btn.style.setProperty("--shake", holding && p > 0.55 && !rm ? "running" : "paused");
+        if (p >= 1 && holding) {
+          completeHold();
+          return;
+        }
+        if (holding || p > 0) raf = requestAnimationFrame(tick);
+        else { raf = 0; last = 0; }
+      };
+
+      const startHold = () => {
+        if (finished) return;
+        holding = true;
+        btn.classList.add("is-holding");
+        if (!raf) { last = 0; raf = requestAnimationFrame(tick); }
+      };
+
+      const stopHold = () => {
+        holding = false;
+        btn.classList.remove("is-holding");
+        if (!raf && p > 0) raf = requestAnimationFrame(tick);
+      };
+
+      btn.addEventListener("pointerdown", (e) => {
+        if (e.button === 0) {
+          try { btn.setPointerCapture(e.pointerId); } catch (err) {}
+          startHold();
+        }
+      });
+      btn.addEventListener("pointerup", stopHold);
+      btn.addEventListener("pointercancel", stopHold);
+      btn.addEventListener("lostpointercapture", stopHold);
+      btn.addEventListener("contextmenu", (e) => e.preventDefault());
+      btn.addEventListener("keydown", (e) => {
+        if (e.key === " " || e.key === "Enter") {
+          e.preventDefault();
+          if (!e.repeat) startHold();
+        }
+      });
+      btn.addEventListener("keyup", (e) => {
+        if (e.key === " " || e.key === "Enter") stopHold();
+      });
+      btn.addEventListener("blur", stopHold);
+      btn.addEventListener("click", (e) => e.preventDefault());
+
+      undo.addEventListener("click", () => {
+        restoreClearedSnapshots();
+        resetControlUI();
+      });
+    }
+
+    function bindProgressDownloadButton(wrapId, triggerExportFn) {
+      const root = document.getElementById(wrapId);
+      if (!root || root.dataset.bound === "1") return;
+      root.dataset.bound = "1";
+      const btn = root.querySelector(".dl-prog-btn");
+      const pct = root.querySelector(".dl-pct");
+      if (!btn || !pct) return;
+
+      const rm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const DUR = rm ? 320 : 1050;
+      let raf = 0, timers = [], t0 = 0;
+
+      const later = (fn, ms) => {
+        timers.push(setTimeout(() => { if (root.isConnected) fn(); }, ms));
+      };
+      const clearAll = () => {
+        timers.forEach(clearTimeout);
+        timers = [];
+        cancelAnimationFrame(raf);
+        raf = 0;
+      };
+      const setVal = (v) => {
+        btn.style.setProperty("--p", v.toFixed(4));
+        pct.textContent = Math.round(v * 100) + "%";
+      };
+      const curve = (x) => Math.min(1, x + Math.sin(x * Math.PI * 3) * 0.04 * (1 - x));
+      const reset = () => {
+        clearAll();
+        root.dataset.state = "idle";
+        setVal(0);
+      };
+      const finish = () => {
+        try { triggerExportFn(); } catch (e) {}
+        root.dataset.state = "fold";
+        later(() => { root.dataset.state = "done"; }, rm ? 80 : 480);
+        later(reset, rm ? 1400 : 2500);
+      };
+      const step = (now) => {
+        if (!root.isConnected) return;
+        const x = Math.min(1, (now - t0) / DUR);
+        setVal(curve(x));
+        if (x < 1) raf = requestAnimationFrame(step);
+        else finish();
+      };
+
+      btn.addEventListener("click", () => {
+        const s = root.dataset.state;
+        if (s === "run") {
+          reset();
+          return;
+        }
+        if (s !== "idle") {
+          reset();
+          return;
+        }
+        clearAll();
+        setVal(0);
+        root.dataset.state = "run";
+        later(() => {
+          t0 = performance.now();
+          raf = requestAnimationFrame(step);
+        }, rm ? 0 : 150);
+      });
+    }
+
+    function initProgressDownloadButtons() {
+      bindProgressDownloadButton("dlWrapPNG", exportSnapshotPNG);
+      bindProgressDownloadButton("dlWrapPDF", exportSnapshotPDF);
+    }
+
 
     // Nạp chuỗi 5 bước hướng dẫn mẫu cho học sinh / giáo viên test xuất ảnh ngay
     function loadDemoMultiStepLesson() {
@@ -6229,6 +6759,8 @@
       state.snapshots = [];
       loadDemoMultiStepLesson();
       renderAll();
+      initHoldToDeleteButton();
+      initProgressDownloadButtons();
       window.__initing = false;
 
       // Đăng ký Service Worker cho PWA Offline
