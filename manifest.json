@@ -1,0 +1,25 @@
+{
+  "name": "Casio Study Desk - Giả lập fx-580VN X & fx-880BTG Offline",
+  "short_name": "Casio 580/880",
+  "description": "Giả lập máy tính Casio fx-580VN X & fx-880BTG 1:1 chạy 100% Offline, hỗ trợ Bảng tính Lớp 12, chụp màn hình lùi nhiều bước (PNG/PDF/Clipboard) và chế độ PiP dạy học.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1e293b",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%231e293b'/%3E%3Crect x='28' y='20' width='136' height='152' rx='18' fill='%23334155' stroke='%2394a3b8' stroke-width='4'/%3E%3Crect x='42' y='36' width='108' height='44' rx='6' fill='%23c8d6b9' stroke='%23475569' stroke-width='3'/%3E%3Ctext x='96' y='64' font-family='monospace' font-size='20' font-weight='bold' fill='%230f172a' text-anchor='middle'%3Efx-580/880%3C/text%3E%3Ccircle cx='96' cy='102' r='14' fill='%23cbd5e1'/%3E%3Crect x='42' y='124' width='22' height='14' rx='3' fill='%23f59e0b'/%3E%3Crect x='70' y='124' width='22' height='14' rx='3' fill='%23ef4444'/%3E%3Crect x='98' y='124' width='22' height='14' rx='3' fill='%23e2e8f0'/%3E%3Crect x='126' y='124' width='22' height='14' rx='3' fill='%2338bdf8'/%3E%3Crect x='42' y='146' width='22' height='14' rx='3' fill='%23e2e8f0'/%3E%3Crect x='70' y='146' width='22' height='14' rx='3' fill='%23e2e8f0'/%3E%3Crect x='98' y='146' width='22' height='14' rx='3' fill='%23e2e8f0'/%3E%3Crect x='126' y='146' width='22' height='14' rx='3' fill='%2310b981'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%231e293b'/%3E%3Crect x='76' y='48' width='360' height='416' rx='44' fill='%23334155' stroke='%2394a3b8' stroke-width='10'/%3E%3Crect x='112' y='92' width='288' height='116' rx='14' fill='%23c8d6b9' stroke='%23475569' stroke-width='6'/%3E%3Ctext x='256' y='164' font-family='monospace' font-size='48' font-weight='bold' fill='%230f172a' text-anchor='middle'%3ECASIO VN%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
