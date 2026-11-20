@@ -6,13 +6,9 @@
 
 Truy cập trực tiếp bản chạy web tại: [https://misasef23-eng.github.io/Math-Gear/](https://www.google.com/search?q=https://misasef23-eng.github.io/Math-Gear/)
 
-&lt;p align=&quot;center&quot;&gt;
-&lt;img src=&quot;assets/demo-desktop.jpg&quot; alt=&quot;Giao diện toàn màn hình MathGear trên máy tính&quot; width=&quot;100%&quot; /&gt;
-&lt;/p&gt;
 
-&lt;p align=&quot;center&quot;&gt;
-&lt;img src=&quot;assets/demo-calculator.jpg&quot; alt=&quot;Cận cảnh giao diện máy tính MathGear fx-580 LNA với 4 phiên bản màu&quot; width=&quot;380&quot; /&gt;
-&lt;/p&gt;
+
+
 
 ## Tính năng nổi bật
 
@@ -50,6 +46,7 @@ Math-Gear/
 └── README.md           # Tài liệu giới thiệu & hướng dẫn
 
 
+
 ```
 
 ## Hướng dẫn sử dụng & triển khai
@@ -60,6 +57,7 @@ Mở file `index.html` bằng trình duyệt hiện đại (Chrome, Edge, Safari
 
 ```
 python3 -m http.server 8080
+
 
 
 ```
@@ -110,6 +108,3 @@ Mỗi sự đóng góp, dù lớn hay nhỏ, đều là nguồn động viên qu
 
 Cảm ơn bạn đã đồng hành cùng MathGear! 💚
 
-&lt;p align=&quot;center&quot;&gt;
-&lt;img src=&quot;assets/donate-qr.jpg&quot; alt=&quot;Mã QR ủng hộ dự án MathGear&quot; width=&quot;260&quot; /&gt;
-&lt;/p&gt;
