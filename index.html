@@ -3751,6 +3751,16 @@
         return `(${prod})`;
       });
 
+      // Chuyển số thập phân vô hạn tuần hoàn a.b(c) thành phân số chính xác (trước khi xử lý nhân ngầm định)
+      s = s.replace(/(\d+)\.(\d*)\((\d+)\)/g, (_, intPart, nonRep, rep) => {
+        const k = nonRep.length;
+        const m = rep.length;
+        const fullNum = Number(intPart + nonRep + rep);
+        const subNum = Number(intPart + nonRep);
+        const den = Math.pow(10, k + m) - Math.pow(10, k);
+        return `((${fullNum - subNum})/(${den}))`;
+      });
+
       // Chuẩn hóa ký hiệu toán học
       s = s
         .replace(/×/g, "*")
@@ -3943,6 +3953,12 @@
         // Biến x, y, z in nghiêng chuẩn toán học Casio (hỗ trợ cả xx, xy, xyz liền nhau)
         t = t.replace(/(^|[^a-wA-Z])([xyz]+)(?![a-wA-Z])/g, (_, pre, vars) =>
           pre + vars.split("").map((ch) => `<i class="nt-var">${ch}</i>`).join("")
+        );
+        // Chu kỳ tuần hoàn trống: 0.(|) -> hiển thị ô vuông ở giữa dấu ngoặc
+        t = t.replace(/(\d+\.\d*)\((@@CUR@@)?\)/g, (_, pre, cur) =>
+          cur
+            ? `${pre}(<span class="nt-empty-box active-box">${cur}</span>)`
+            : `${pre}(<span class="nt-empty-box"></span>)`
         );
         // Ô trống □ nếu có
         t = t.replace(/□/g, `<span class="nt-empty-box"></span>`);
@@ -5227,6 +5243,7 @@
       // 4. Nhấn ALPHA + phím có nhãn phụ (A-F, x, y, z, M, =, :, ÷R, ∏(, GCD, LCM, e, RanInt)
       if (wasAlpha && keyMeta.alpha) {
         if (keyMeta.alpha === "∏(") { insertIntoExpr("∏(x,1,5)"); afterKeyAction(false); return; }
+        if (keyMeta.alpha === "(■)") { insertIntoExpr("()", 1); afterKeyAction(false, "Nhập chu kỳ tuần hoàn"); return; }
         if (keyMeta.alpha === "GCD") { insertIntoExpr("GCD("); afterKeyAction(false); return; }
         if (keyMeta.alpha === "LCM") { insertIntoExpr("LCM("); afterKeyAction(false); return; }
         if (keyMeta.alpha === "RanInt") { insertIntoExpr("1"); afterKeyAction(false); return; }
