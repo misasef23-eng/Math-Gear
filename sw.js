@@ -1,5 +1,5 @@
 // Service Worker - Casio Study Desk PWA (100% Offline Ready)
-const CACHE_NAME = 'mathgear-pwa-v1.5';
+const CACHE_NAME = 'mathgear-pwa-v2.3';
 const OFFLINE_ASSETS = [
   './',
   './index.html',
