@@ -3767,8 +3767,8 @@
         .replace(/sin\(/g, "__sin(")
         .replace(/cos\(/g, "__cos(")
         .replace(/tan\(/g, "__tan(")
-        .replace(/ln\(/g, "Math.log(")
         .replace(/log\(/g, "__log(")
+        .replace(/ln\(/g, "Math.log(")
         .replace(/GCD\(/g, "__gcd(")
         .replace(/LCM\(/g, "__lcm(")
         .replace(/abs\(/g, "Math.abs(")
@@ -3777,10 +3777,12 @@
         .replace(/([0-9]+)!/g, "__fact($1)")
         .replace(/\^/g, "**");
 
-      // Nhân ngầm định cơ bản: 2x -> 2*x, 2( -> 2*(, )x -> )*x
+      // Nhân ngầm định cơ bản: 2x -> 2*x, xx -> x*x, 2√(9) -> 2*Math.sqrt(9), 2sin(30) -> 2*__sin(30)
       s = s
-        .replace(/([0-9])([A-Fx-y(])/g, "$1*$2")
-        .replace(/(\))([0-9A-Fx-y(])/g, "$1*$2");
+        .replace(/([0-9])(Math\.|__|[A-FMx-z(]|e(?![0-9+-]))/g, "$1*$2")
+        .replace(/(\))([0-9A-FMx-z(]|Math\.|__|e(?![0-9+-]))/g, "$1*$2")
+        .replace(/([xyz])(Math\.|__|\()/g, "$1*$2")
+        .replace(/([xyz])(?=[xyz])/g, "$1*");
 
       const helpers = {
         __sin: (v) => Math.sin(toRad(v)),
@@ -3804,6 +3806,7 @@
         F: env.F,
         x: env.x,
         y: env.y,
+        z: env.z,
         M: env.M
       };
 
@@ -3937,8 +3940,10 @@
           .replace(/=/g, "@@EQ@@");
         // Số mũ ^-1, ^2, ^3, ^n
         t = t.replace(/\^(@@CUR@@)?(−?-?[0-9a-zA-Z]+|□)/g, `<sup class="nt-sup">$1$2</sup>`);
-        // Biến x, y, z in nghiêng chuẩn toán học Casio
-        t = t.replace(/(^|[^a-zA-Z])([xyz])(?![a-zA-Z])/g, `$1<i class="nt-var">$2</i>`);
+        // Biến x, y, z in nghiêng chuẩn toán học Casio (hỗ trợ cả xx, xy, xyz liền nhau)
+        t = t.replace(/(^|[^a-wA-Z])([xyz]+)(?![a-wA-Z])/g, (_, pre, vars) =>
+          pre + vars.split("").map((ch) => `<i class="nt-var">${ch}</i>`).join("")
+        );
         // Ô trống □ nếu có
         t = t.replace(/□/g, `<span class="nt-empty-box"></span>`);
         // Khoảng cách cân đối cho dấu =
@@ -4587,7 +4592,7 @@
       // Tìm metadata của phím trên model hiện tại
       const layout = HARDWARE_LAYOUTS[state.model];
       const allKeys = [...layout.topLeft, ...layout.topRight, ...layout.sciKeys, ...layout.numKeys];
-      const keyMeta = allKeys.find((k) => k.id === keyId) || { id: keyId, label: keyId, shift: "", alpha: "" };
+      const keyMeta = allKeys.find((k) => k.id === keyId) || { id: keyId, label: keyId === "EQ_SIGN" ? "=" : keyId, shift: "", alpha: "" };
 
       const wasShift = state.shift;
       const wasAlpha = state.alpha;
@@ -4907,8 +4912,8 @@
       const tokenMap = {
         "0": "0", "1": "1", "2": "2", "3": "3", "4": "4",
         "5": "5", "6": "6", "7": "7", "8": "8", "9": "9",
-        "DOT": ".", "ADD": "+", "SUB": "-", "MUL": "*", "DIV": "/",
-        "LPAREN": "(", "RPAREN": ")", "POWN": "^", "POW2": "^2"
+        "DOT": ".", "ADD": "+", "SUB": "-", "MUL": "*", "DIV": "/", "FRAC": "/",
+        "LPAREN": "(", "RPAREN": ")", "POWN": "^", "POW2": "^2", "EQ_SIGN": "="
       };
       let ch = tokenMap[keyId] || "";
       if (wasAlpha && keyMeta.alpha) ch = keyMeta.alpha;
@@ -4947,7 +4952,7 @@
       const cleaned = exprStr
         .replace(/sin⁻¹|cos⁻¹|tan⁻¹|sin|cos|tan|log|ln|abs|GCD|LCM|Ans|Intg|Int|Pol|Rec|RanInt|Ran#|Rnd/g, "");
       const found = [];
-      for (const v of ["x", "y", "A", "B", "C", "D", "E", "F", "M"]) {
+      for (const v of ["x", "y", "z", "A", "B", "C", "D", "E", "F", "M"]) {
         if (cleaned.includes(v) && !found.includes(v)) found.push(v);
       }
       return found.length ? found : ["x"];
@@ -5062,7 +5067,7 @@
         const dlgDigitMap = {
           "0": "0", "1": "1", "2": "2", "3": "3", "4": "4",
           "5": "5", "6": "6", "7": "7", "8": "8", "9": "9",
-          "DOT": ".", "SUB": "-", "NEG": "-", "ADD": "+", "MUL": "×", "DIV": "÷"
+          "DOT": ".", "SUB": "-", "NEG": "-", "ADD": "+", "MUL": "×", "DIV": "÷", "FRAC": "÷"
         };
         if (dlgDigitMap[keyId] !== undefined) {
           if (dlg.stage === "PROMPT") {
@@ -5253,9 +5258,10 @@
           return;
         }
         if (subTriggered === "RECALL") {
-          showToast(`Bộ nhớ biến: x=${state.vars.x}, y=${state.vars.y}, A=${state.vars.A}, B=${state.vars.B}, C=${state.vars.C}, M=${state.vars.M}`);
+          showToast(`Bộ nhớ biến: x=${state.vars.x}, y=${state.vars.y}, z=${state.vars.z}, A=${state.vars.A}, B=${state.vars.B}, C=${state.vars.C}, M=${state.vars.M}`);
           return;
         }
+        if (subTriggered === "y") { insertIntoExpr("y"); afterKeyAction(false, "Nhập y"); return; }
         if (subTriggered === "d/dx") { insertIntoExpr("d/dx(x^2,2)"); afterKeyAction(false); return; }
         if (subTriggered === "∑(") { insertIntoExpr("∑(x,1,10)"); afterKeyAction(false); return; }
         if (subTriggered === "³√■" || subTriggered === "ⁿ√■") { insertIntoExpr("³√("); afterKeyAction(false); return; }
@@ -5421,9 +5427,19 @@
         const out = evaluateCasioExpression(state.expr);
         state.ans = isFinite(out.val) ? out.val : state.ans;
         state.lastResultValue = out.val;
-        state.formatIndex = 0;
         state.lastResultForms = buildResultForms(out.val, out.remainder);
-        state.lastResultText = state.lastResultForms.exact;
+        const fracTrim = state.expr.trim();
+        const fracMatch = fracTrim.match(/^-?⟮(-?\d+)¦(\d+)⟯$/) || fracTrim.match(/^-?(\d+)\/(\d+)$/);
+        const isAlreadySimplifiedFrac = Boolean(
+          fracMatch && Number(fracMatch[2]) > 1 && Math.abs(Number(fracMatch[1])) > 0 && gcdInt(Number(fracMatch[1]), Number(fracMatch[2])) === 1
+        );
+        if (isAlreadySimplifiedFrac && !out.remainder && isFinite(out.val)) {
+          state.formatIndex = 1;
+          state.lastResultText = state.lastResultForms.decimal;
+        } else {
+          state.formatIndex = 0;
+          state.lastResultText = state.lastResultForms.exact;
+        }
         state.hasEvaluated = true;
         if (state.expr.trim()) {
           state.calcHistory.push({
@@ -5499,6 +5515,9 @@
         "LPAREN": "(",
         "RPAREN": ")",
         "VAR_X": "x",
+        "VAR_Y": "y",
+        "VAR_Z": "z",
+        "EQ_SIGN": "=",
         "GCD": "GCD(",
         "DIVR": "÷R",
         "EXP10": "×10^",
@@ -6485,6 +6504,33 @@
 
     let activePopoutWin = null;
 
+    function getCalcEl(id) {
+      return document.getElementById(id) || (activePopoutWin && !activePopoutWin.closed ? activePopoutWin.document.getElementById(id) : null);
+    }
+
+    function handleCalculatorKeydown(e) {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "SELECT" || e.target.tagName === "TEXTAREA")) {
+        return;
+      }
+      if (e.key === "^" || (e.shiftKey && e.code === "Digit6")) { e.preventDefault(); pressCalcKey("POWN"); return; }
+      if (/^[0-9]$/.test(e.key)) { e.preventDefault(); pressCalcKey(e.key); return; }
+      const map = {
+        "+": "ADD", "-": "SUB", "*": "MUL", "/": "FRAC", "^": "POWN",
+        "(": "LPAREN", ")": "RPAREN", ".": "DOT",
+        "Enter": "EQUAL", "=": "EQ_SIGN",
+        "Backspace": "DEL", "Delete": "DEL", "Escape": "AC",
+        "ArrowUp": "UP", "ArrowDown": "DOWN", "ArrowLeft": "LEFT", "ArrowRight": "RIGHT",
+        "x": "VAR_X", "X": "VAR_X", "y": "VAR_Y", "Y": "VAR_Y", "z": "VAR_Z", "Z": "VAR_Z",
+        "s": "SHIFT", "S": "SHIFT", "a": "ALPHA", "A": "ALPHA",
+        "f": "SD", "F": "SD"
+      };
+      if (map[e.key]) {
+        e.preventDefault();
+        pressCalcKey(map[e.key]);
+      }
+    }
+
     function bridgeWindowFunctionsToPiP(targetWin) {
       const fnNames = [
         "pressCalcKey", "handleDpadRingClick", "toggleAngleUnit", "setCalculatorMode", "switchCalculatorModel", "set580Color",
@@ -6496,22 +6542,7 @@
           targetWin[fn] = window[fn];
         }
       });
-      targetWin.addEventListener("keydown", (e) => {
-        if (e.key === "^" || (e.shiftKey && e.code === "Digit6")) { e.preventDefault(); window.pressCalcKey("POWN"); return; }
-        if (/^[0-9]$/.test(e.key)) { e.preventDefault(); window.pressCalcKey(e.key); return; }
-        const map = {
-          "+": "ADD", "-": "SUB", "*": "MUL", "/": "DIV", "^": "POWN",
-          "(": "LPAREN", ")": "RPAREN", ".": "DOT",
-          "Enter": "EQUAL", "=": "EQUAL",
-          "Backspace": "DEL", "Delete": "DEL", "Escape": "AC",
-          "ArrowUp": "UP", "ArrowDown": "DOWN", "ArrowLeft": "LEFT", "ArrowRight": "RIGHT",
-          "x": "VAR_X", "X": "VAR_X", "f": "SD", "F": "SD"
-        };
-        if (map[e.key]) {
-          e.preventDefault();
-          window.pressCalcKey(map[e.key]);
-        }
-      });
+      targetWin.addEventListener("keydown", handleCalculatorKeydown);
     }
 
     function mountCalcColumnIntoFloatingWindow(pipWin) {
@@ -6797,19 +6828,21 @@
      * ============================================================================ */
     function renderHardwareKeypad() {
       const layout = HARDWARE_LAYOUTS[state.model];
-      const shell = document.getElementById("casioHardwareShell");
+      const shell = getCalcEl("casioHardwareShell");
+      if (!shell) return;
+      const calcDoc = shell.ownerDocument || document;
       shell.className = state.model === "580" ? `casio-shell skin-580 color-${state.skinColor}` : `casio-shell skin-880`;
-      const cpBar = document.getElementById("colorPicker580");
+      const cpBar = getCalcEl("colorPicker580");
       if (cpBar) cpBar.classList.toggle("hidden", state.model !== "580");
-      document.querySelectorAll("[data-skin-color]").forEach((b) => {
+      calcDoc.querySelectorAll("[data-skin-color]").forEach((b) => {
         b.classList.toggle("active", b.getAttribute("data-skin-color") === state.skinColor);
       });
       const isPastel580 = state.model === "580" && (state.skinColor === "blue" || state.skinColor === "pink" || state.skinColor === "purple");
       const scShift = state.skinColor === "blue" ? "#9c6f00" : state.skinColor === "pink" ? "#b86600" : state.skinColor === "purple" ? "#9e6200" : "#ecc94b";
       const scAlpha = state.skinColor === "blue" ? "#9e1b3c" : state.skinColor === "pink" ? "#b91c1c" : state.skinColor === "purple" ? "#a61c4c" : "#f472b6";
       const scBase  = isPastel580 ? "#1d4ed8" : "#38bdf8";
-      document.getElementById("hardwareModelLabel").textContent = layout.modelLabel;
-      document.getElementById("hardwareSubTag").textContent = layout.subTag;
+      getCalcEl("hardwareModelLabel").textContent = layout.modelLabel;
+      getCalcEl("hardwareSubTag").textContent = layout.subTag;
 
       const renderTopGroup = (arr) =>
         arr
@@ -6824,8 +6857,8 @@
           )
           .join("");
 
-      document.getElementById("topLeftControlKeys").innerHTML = renderTopGroup(layout.topLeft);
-      document.getElementById("topRightControlKeys").innerHTML = renderTopGroup(layout.topRight);
+      getCalcEl("topLeftControlKeys").innerHTML = renderTopGroup(layout.topLeft);
+      getCalcEl("topRightControlKeys").innerHTML = renderTopGroup(layout.topRight);
 
       // 1:1 Precision SVGs for Main Scientific Keycaps (matching image_ff728a.jpg)
       const KEYCAP_SVGS = {
@@ -6889,7 +6922,7 @@
         "i": `<span style="font-family:'Times New Roman','Liberation Serif',serif; font-style:italic; font-size:11px; font-weight:900; color:${scBase};">i</span>`
       };
 
-      document.getElementById("sciKeypadGrid").innerHTML = layout.sciKeys
+      getCalcEl("sciKeypadGrid").innerHTML = layout.sciKeys
         .map((k) => {
           if (k.spacer) {
             return `<div class="key-cell key-spacer"></div>`;
@@ -6920,7 +6953,7 @@
         })
         .join("");
 
-      document.getElementById("numKeypadGrid").innerHTML = layout.numKeys
+      getCalcEl("numKeypadGrid").innerHTML = layout.numKeys
         .map((k) => {
           const centerOnly = k.shift && !k.alpha;
           const subStyle = centerOnly ? `style="justify-content:center;"` : "";
@@ -6943,22 +6976,26 @@
     }
 
     function renderLCD() {
-      document.getElementById("flagShift").classList.toggle("on", state.shift);
-      document.getElementById("flagAlpha").classList.toggle("on", state.alpha);
-      document.getElementById("flagSto").classList.toggle("on", state.stoMode);
-      const flagM = document.getElementById("flagM");
+      const flagShift = getCalcEl("flagShift");
+      const flagAlpha = getCalcEl("flagAlpha");
+      const flagSto = getCalcEl("flagSto");
+      if (flagShift) flagShift.classList.toggle("on", state.shift);
+      if (flagAlpha) flagAlpha.classList.toggle("on", state.alpha);
+      if (flagSto) flagSto.classList.toggle("on", state.stoMode);
+      const flagM = getCalcEl("flagM");
       if (flagM) flagM.classList.toggle("on", Math.abs(state.vars.M) > 1e-12);
-      const angleFlag = document.getElementById("flagAngle");
-      angleFlag.textContent = state.angleUnit;
+      const angleFlag = getCalcEl("flagAngle");
+      if (angleFlag) angleFlag.textContent = state.angleUnit;
 
       // Update external variable chips bar outside the calculator
-      const extVars = document.getElementById("externalVarsBar");
+      const extVars = getCalcEl("externalVarsBar");
       if (extVars) {
         const fmtV = (v) => Number(Number(v || 0).toPrecision(6));
         extVars.innerHTML = [
           `<div class="hud-var-chip"><span>Ans</span> = ${fmtV(state.ans)}</div>`,
           `<div class="hud-var-chip"><span>x</span> = ${fmtV(state.vars.x)}</div>`,
           `<div class="hud-var-chip"><span>y</span> = ${fmtV(state.vars.y)}</div>`,
+          `<div class="hud-var-chip"><span>z</span> = ${fmtV(state.vars.z)}</div>`,
           `<div class="hud-var-chip"><span>A</span> = ${fmtV(state.vars.A)}</div>`,
           `<div class="hud-var-chip"><span>B</span> = ${fmtV(state.vars.B)}</div>`,
           `<div class="hud-var-chip"><span>C</span> = ${fmtV(state.vars.C)}</div>`,
@@ -6966,10 +7003,11 @@
         ].join("");
       }
 
-      const bodyEl = document.getElementById("lcdDynamicBody");
-      const badgeEl = document.getElementById("lcdModeBadge");
-      const leftHint = document.getElementById("lcdLeftHint");
-      const rightHint = document.getElementById("lcdFormatHint");
+      const bodyEl = getCalcEl("lcdDynamicBody");
+      const badgeEl = getCalcEl("lcdModeBadge");
+      const leftHint = getCalcEl("lcdLeftHint");
+      const rightHint = getCalcEl("lcdFormatHint");
+      if (!bodyEl || !badgeEl || !leftHint || !rightHint) return;
 
       // 0. Màn hình RESET (SHIFT + 9) chuẩn Casio fx-580VN X
       if (state.resetDialog) {
@@ -7292,8 +7330,9 @@
     }
 
     function renderKeylogBar() {
-      const box = document.getElementById("keylogStreamBox");
-      const countEl = document.getElementById("keylogCount");
+      const box = getCalcEl("keylogStreamBox");
+      const countEl = getCalcEl("keylogCount");
+      if (!box || !countEl) return;
       countEl.textContent = String(state.keylog.length);
       if (!state.keylog.length) {
         box.innerHTML = `<span class="empty-note">Phím bạn bấm sẽ hiện ở đây để học sinh dễ theo dõi.</span>`;
@@ -7411,8 +7450,10 @@
       state.skinColor = colorCode;
       if (state.model !== "580") {
         state.model = "580";
-        document.getElementById("btnModel580").classList.add("active");
-        document.getElementById("btnModel880").classList.remove("active");
+        const b580 = getCalcEl("btnModel580");
+        const b880 = getCalcEl("btnModel880");
+        if (b580) b580.classList.add("active");
+        if (b880) b880.classList.remove("active");
       }
       try { localStorage.setItem("mathgear-580-color", colorCode); } catch (e) {}
       renderHardwareKeypad();
@@ -7422,8 +7463,10 @@
 
     function switchCalculatorModel(modelCode) {
       state.model = modelCode;
-      document.getElementById("btnModel580").classList.toggle("active", modelCode === "580");
-      document.getElementById("btnModel880").classList.toggle("active", modelCode === "880");
+      const b580 = getCalcEl("btnModel580");
+      const b880 = getCalcEl("btnModel880");
+      if (b580) b580.classList.toggle("active", modelCode === "580");
+      if (b880) b880.classList.toggle("active", modelCode === "880");
       renderHardwareKeypad();
       renderAll();
       recordStepSnapshot(`Chuyển sang dòng máy Casio fx-${modelCode === "880" ? "880BTG" : "580VN X"}`);
@@ -7468,6 +7511,10 @@
       }
       const meta = document.querySelector('meta[name="theme-color"]');
       if (meta) meta.setAttribute("content", isDark ? "#1C1C1E" : "#FDF0D5");
+      if (activePopoutWin && !activePopoutWin.closed && activePopoutWin.document && activePopoutWin.document.body) {
+        activePopoutWin.document.body.classList.toggle("dark-desk", isDark);
+        activePopoutWin.document.body.style.background = isDark ? "#1C1C1E" : "#FDF0D5";
+      }
       try { localStorage.setItem("mathgear-theme", isDark ? "dark" : "light"); } catch (e) {}
     }
 
@@ -7627,23 +7674,7 @@
         }
         return;
       }
-      if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "SELECT" || e.target.tagName === "TEXTAREA")) {
-        return;
-      }
-      if (e.key === "^" || (e.shiftKey && e.code === "Digit6")) { e.preventDefault(); pressCalcKey("POWN"); return; }
-      if (/^[0-9]$/.test(e.key)) { e.preventDefault(); pressCalcKey(e.key); return; }
-      const map = {
-        "+": "ADD", "-": "SUB", "*": "MUL", "/": "DIV", "^": "POWN",
-        "(": "LPAREN", ")": "RPAREN", ".": "DOT",
-        "Enter": "EQUAL", "=": "EQUAL",
-        "Backspace": "DEL", "Delete": "DEL", "Escape": "AC",
-        "ArrowUp": "UP", "ArrowDown": "DOWN", "ArrowLeft": "LEFT", "ArrowRight": "RIGHT",
-        "x": "VAR_X", "X": "VAR_X", "f": "SD", "F": "SD"
-      };
-      if (map[e.key]) {
-        e.preventDefault();
-        pressCalcKey(map[e.key]);
-      }
+      handleCalculatorKeydown(e);
     });
 
     // Hỗ trợ chạm thông minh trên toàn bộ vòng D-pad (tránh bấm hụt trên màn hình cảm ứng iPhone/Android)
@@ -7671,7 +7702,7 @@
     // Tự động đưa tiêu điểm bàn phím vào máy tính để gõ ngay không cần click khoảng trắng
     function focusCalculatorDesk() {
       try { window.focus(); } catch (e) {}
-      const shell = document.getElementById("casioHardwareShell");
+      const shell = getCalcEl("casioHardwareShell");
       if (shell && typeof shell.focus === "function") {
         try { shell.focus({ preventScroll: true }); } catch (e) { shell.focus(); }
       }
