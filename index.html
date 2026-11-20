@@ -6986,7 +6986,7 @@
             <span class="sub-shift">${shiftFormatted}</span>
             ${alphaFormatted ? `<span class="sub-alpha">${alphaFormatted}</span>` : ""}
           </div>
-          <button type="button" class="casio-key ${k.cls}" onclick="pressCalcKey('${k.id}')">${k.id === "EXP10" ? "×10<sup><i>x</i></sup>" : k.label}</button>
+          <button type="button" class="casio-key ${k.cls}" onclick="pressCalcKey('${k.id}')">${k.id === "EXP10" ? `<span style="line-height:1;">×10<sup style="font-size:0.62em; vertical-align:0.42em; margin-left:1px;"><i>x</i></sup></span>` : k.label}</button>
         </div>`;
         })
         .join("");
