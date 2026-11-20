@@ -4,15 +4,15 @@
 
 ## Trải nghiệm trực tuyến & Ảnh Demo
 
-Truy cập trực tiếp bản chạy web tại: [**https://misasef23-eng.github.io/Math-Gear/**](https://www.google.com/search?q=https://misasef23-eng.github.io/Math-Gear/)
+Truy cập trực tiếp bản chạy web tại: [https://misasef23-eng.github.io/Math-Gear/](https://www.google.com/search?q=https://misasef23-eng.github.io/Math-Gear/)
 
-<p align="center">
-<img src="assets/demo-desktop.jpg" alt="Giao diện toàn màn hình MathGear trên máy tính" width="100%" />
-</p>
+&lt;p align=&quot;center&quot;&gt;
+&lt;img src=&quot;assets/demo-desktop.jpg&quot; alt=&quot;Giao diện toàn màn hình MathGear trên máy tính&quot; width=&quot;100%&quot; /&gt;
+&lt;/p&gt;
 
-<p align="center">
-<img src="assets/demo-calculator.jpg" alt="Cận cảnh giao diện máy tính MathGear fx-580 LNA với 4 phiên bản màu" width="380" />
-</p>
+&lt;p align=&quot;center&quot;&gt;
+&lt;img src=&quot;assets/demo-calculator.jpg&quot; alt=&quot;Cận cảnh giao diện máy tính MathGear fx-580 LNA với 4 phiên bản màu&quot; width=&quot;380&quot; /&gt;
+&lt;/p&gt;
 
 ## Tính năng nổi bật
 
@@ -80,7 +80,7 @@ Mở `index.html`, tìm khối `const AFFILIATE_CONFIG = { ... }` ngay đầu th
 
 MathGear là dự án mã nguồn mở (Open Source), được phát triển với định hướng minh bạch trong mã nguồn và hoạt động vận hành.
 
-Chúng tôi khuyến khích cộng đồng lập trình viên tham gia kiểm tra, đánh giá mã nguồn, phát hiện và báo cáo các vấn đề bảo mật cũng như đề xuất cải tiến cho dự án tại [github.com/misasef23-eng/Math-Gear](https://github.com/misasef23-eng/Math-Gear).
+Chúng tôi khuyến khích cộng đồng lập trình viên tham gia kiểm tra, đánh giá mã nguồn, phát hiện và báo cáo các vấn đề bảo mật cũng như đề xuất cải tiến cho dự án tại [github.com/misasef23-eng/Math-Gear](https://www.google.com/search?q=https://github.com/misasef23-eng/Math-Gear).
 
 Mã nguồn công khai cho phép mọi người có chuyên môn chủ động kiểm tra cách thức hoạt động của nền tảng, góp phần nâng cao tính minh bạch và độ tin cậy.
 
@@ -110,6 +110,6 @@ Mỗi sự đóng góp, dù lớn hay nhỏ, đều là nguồn động viên qu
 
 Cảm ơn bạn đã đồng hành cùng MathGear! 💚
 
-<p align="center">
-<img src="assets/donate-qr.jpg" alt="Mã QR ủng hộ dự án MathGear" width="260" />
-</p>
+&lt;p align=&quot;center&quot;&gt;
+&lt;img src=&quot;assets/donate-qr.jpg&quot; alt=&quot;Mã QR ủng hộ dự án MathGear&quot; width=&quot;260&quot; /&gt;
+&lt;/p&gt;
