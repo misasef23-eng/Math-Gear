@@ -109,3 +109,10 @@ Mỗi sự đóng góp, dù lớn hay nhỏ, đều là nguồn động viên qu
 Cảm ơn bạn đã đồng hành cùng MathGear! 💚
 
 ![Mã QR ủng hộ dự án MathGear](assets/donate-qr.jpg)
+
+* 
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+You are free to use, copy, modify, distribute, and sublicense this software in accordance with the terms of the MIT License.
