@@ -4,11 +4,11 @@
 
 ## Trải nghiệm trực tuyến & Ảnh Demo
 
-Truy cập trực tiếp bản chạy web tại: [https://misasef23-eng.github.io/Math-Gear/](https://www.google.com/search?q=https://misasef23-eng.github.io/Math-Gear/)
+Truy cập trực tiếp bản chạy web tại: [https://misasef23-eng.github.io/Math-Gear/](https://misasef23-eng.github.io/Math-Gear/)
 
+![Giao diện toàn màn hình MathGear trên máy tính](assets/demo-desktop.jpg)
 
-
-
+![Cận cảnh giao diện máy tính MathGear fx-580 LNA](assets/demo-calculator.jpg)
 
 ## Tính năng nổi bật
 
@@ -78,7 +78,7 @@ Mở `index.html`, tìm khối `const AFFILIATE_CONFIG = { ... }` ngay đầu th
 
 MathGear là dự án mã nguồn mở (Open Source), được phát triển với định hướng minh bạch trong mã nguồn và hoạt động vận hành.
 
-Chúng tôi khuyến khích cộng đồng lập trình viên tham gia kiểm tra, đánh giá mã nguồn, phát hiện và báo cáo các vấn đề bảo mật cũng như đề xuất cải tiến cho dự án tại [github.com/misasef23-eng/Math-Gear](https://www.google.com/search?q=https://github.com/misasef23-eng/Math-Gear).
+Chúng tôi khuyến khích cộng đồng lập trình viên tham gia kiểm tra, đánh giá mã nguồn, phát hiện và báo cáo các vấn đề bảo mật cũng như đề xuất cải tiến cho dự án tại [github.com/misasef23-eng/Math-Gear](https://github.com/misasef23-eng/Math-Gear).
 
 Mã nguồn công khai cho phép mọi người có chuyên môn chủ động kiểm tra cách thức hoạt động của nền tảng, góp phần nâng cao tính minh bạch và độ tin cậy.
 
@@ -108,3 +108,4 @@ Mỗi sự đóng góp, dù lớn hay nhỏ, đều là nguồn động viên qu
 
 Cảm ơn bạn đã đồng hành cùng MathGear! 💚
 
+![Mã QR ủng hộ dự án MathGear](assets/donate-qr.jpg)
