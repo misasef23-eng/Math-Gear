@@ -113,9 +113,3 @@ Cảm ơn bạn đã đồng hành cùng MathGear! 💚
 <p align="center">
 <img src="assets/donate-qr.jpg" alt="Mã QR ủng hộ dự án MathGear" width="260" />
 </p>
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
-You are free to use, copy, modify, distribute, and sublicense this software in accordance with the terms of the MIT License.
