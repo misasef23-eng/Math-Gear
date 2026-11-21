@@ -5007,6 +5007,29 @@
           return;
         }
         if (dlg.stage === "SOLVED") {
+          // Cho phép bấm STO rồi chọn biến (A-F, x, y, z, M) ngay sau khi ra nghiệm SOLVE
+          if (keyId === "STO" && !wasShift) {
+            state.stoMode = true;
+            renderLCD();
+            return;
+          }
+          const stoTarget = (keyMeta.alpha && /^[A-FxyzM]$/.test(keyMeta.alpha))
+            ? keyMeta.alpha
+            : (keyId === "VAR_X" ? "x" : keyId === "VAR_Y" ? "y" : keyId === "VAR_Z" ? "z" : "");
+          if (wasSto && stoTarget) {
+            const valToStore = isFinite(state.lastResultValue) ? state.lastResultValue : state.ans;
+            state.vars[stoTarget] = valToStore;
+            state.ans = valToStore;
+            state.calcDialog = null;
+            state.expr = `Ans→${stoTarget}`;
+            state.cursorPos = state.expr.length;
+            state.formatIndex = 0;
+            state.lastResultForms = buildResultForms(valToStore);
+            state.lastResultText = state.lastResultForms.exact;
+            state.hasEvaluated = true;
+            afterKeyAction(true, `Gán nghiệm ${state.lastResultText} → ${stoTarget}`);
+            return;
+          }
           // Trên máy thật, sau khi hiện x = ... và L-R = 0, bấm [=] sẽ quay lại hỏi x = [nghiệm] để dò tiếp, bấm [◀]/[▶] sẽ quay về sửa phương trình
           if (keyId === "EQUAL" || keyId === "OK") {
             dlg.stage = "PROMPT";
@@ -7016,6 +7039,9 @@
           `<div class="hud-var-chip"><span>A</span> = ${fmtV(state.vars.A)}</div>`,
           `<div class="hud-var-chip"><span>B</span> = ${fmtV(state.vars.B)}</div>`,
           `<div class="hud-var-chip"><span>C</span> = ${fmtV(state.vars.C)}</div>`,
+          `<div class="hud-var-chip"><span>D</span> = ${fmtV(state.vars.D)}</div>`,
+          `<div class="hud-var-chip"><span>E</span> = ${fmtV(state.vars.E)}</div>`,
+          `<div class="hud-var-chip"><span>F</span> = ${fmtV(state.vars.F)}</div>`,
           `<div class="hud-var-chip"><span>M</span> = ${fmtV(state.vars.M)}</div>`
         ].join("");
       }
