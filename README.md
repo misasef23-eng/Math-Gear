@@ -1,6 +1,6 @@
 # MathGear — Simulate · Explore · Learn
 
-**MathGear** là ứng dụng web mã nguồn mở (PWA) giả lập 1:1 hai dòng máy tính khoa học phổ biến nhất tại Việt Nam (**fx-580 LNA** và **fx-880BTG**), chạy **100% Offline** không phụ thuộc máy chủ hay kết nối mạng. Dự án được thiết kế dành riêng cho học sinh, sinh viên ôn thi THPT và giáo viên giảng dạy trực tuyến.
+**MathGear** là ứng dụng web mã nguồn mở (PWA) giả lập 1:1 hai dòng máy tính khoa học phổ biến nhất tại Việt Nam (**fx-580 LNA** và **fx-880BTG**), chạy **100% Offline** không phụ thuộc máy chủ hay kết nối mạng. Dự án được thiết kế dành riêng cho học sinh ôn thi THPT, sinh viên và giáo viên giảng dạy trực tuyến.
 
 ## Trải nghiệm trực tuyến & Ảnh Demo
 
@@ -107,3 +107,11 @@ Mỗi sự đóng góp, dù lớn hay nhỏ, đều là nguồn động viên qu
 Cảm ơn bạn đã đồng hành cùng MathGear! 💚
 
 ![Mã QR ủng hộ dự án MathGear](./assets/donate-qr.jpg)
+
+
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+You are free to use, copy, modify, distribute, and sublicense this software in accordance with the terms of the MIT License.
