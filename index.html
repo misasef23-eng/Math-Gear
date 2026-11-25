@@ -3997,9 +3997,9 @@
         processed = processed.replace(/³√\(([^()]*)$/, (_, inner) => `__CBRT_START__${inner}__CBRT_END__`);
         processed = processed.replace(/√\(([^()]*)\)/g, (_, inner) => `__SQRT_START__${inner}__SQRT_END__`);
         processed = processed.replace(/√\(([^()]*)$/, (_, inner) => `__SQRT_START__${inner}__SQRT_END__`);
-        // Xử lý phân số a/b dạng text
+        // Xử lý phân số a/b dạng text (hỗ trợ cả tử/mẫu chứa căn như √(2)/2)
         processed = processed.replace(
-          /(\([^()]+\)|[0-9A-Za-zπ@]+)\/(\([^()]+\)|[0-9A-Za-zπ@]+)/g,
+          /(\([^()]+\)|[0-9A-Za-zπ@_]+)\/(\([^()]+\)|[0-9A-Za-zπ@_]+)/g,
           `__FRAC_START__$1__FRAC_MID__$2__FRAC_END__`
         );
 
@@ -7365,7 +7365,7 @@
       const showInputCursor = !state.hasEvaluated;
       bodyEl.innerHTML = `
         <div class="lcd-input-line" id="lcdInputLine">${formatNaturalTextbookHTML(state.expr, showInputCursor)}</div>
-        <div class="lcd-output-line" id="lcdOutputLine">${state.lastResultText}</div>
+        <div class="lcd-output-line" id="lcdOutputLine">${formatNaturalTextbookHTML(state.lastResultText, false)}</div>
       `;
       const formatLabels = ["Chuẩn (Phân số/Căn)", "Số thập phân", "Hỗn số", "Thừa số NT (FACT)"];
       leftHint.textContent = `x=${state.vars.x}, A=${state.vars.A}, Ans=${Number(state.ans.toPrecision(6))}`;
